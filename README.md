@@ -10,3 +10,6 @@ Using the aur (which threw a bunch of 404s for me):
 
 Using pip:
 `pip install get-gecko-driver`
+
+And if necessary Selenium.
+`pip3 install selenium`
