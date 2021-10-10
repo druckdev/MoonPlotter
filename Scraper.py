@@ -14,15 +14,16 @@ except BaseException:
 MB_URL = "https://www.moonboard.com"
 
 # process arguments
-(OPT, _) = getopt.getopt(sys.argv[1:], "d", "debug")
+(OPT, _) = getopt.getopt(sys.argv[1:], "du:p:", ["debug", "username", "password"])
+OPT = dict(OPT)
 
-def find_key(arr, elem): return any(elem in sub for sub in arr)
-
-DEBUG = find_key(OPT, '-d')
+DEBUG = '-d' in OPT or '--debug' in OPT
+USERNAME = OPT['-u'] if OPT['-u'] != '' else OPT['--username']   
+PASSWORD = OPTOPT['-p'] if OPT['-p'] != '' else OPT['--password']
 
 # use getGecko to get the driver
 if getGecko_installed:
-    print("Getting GeckDriver")
+    print("Getting GeckoDriver")
     get_driver = GetGeckoDriver()
     get_driver.install()
 
@@ -32,8 +33,15 @@ fireFoxOptions.headless = not DEBUG
 driver = webdriver.Firefox(options=fireFoxOptions)
 
 driver.get(MB_URL)
-time.sleep(3)
-driver.quit()
 
 # login
-# form id : logindropdown
+driver.find_element_by_id("loginDropdown").click()
+driver.find_element_by_id("Login_Username").send_keys(USERNAME)
+driver.find_element_by_id("Login_Password").send_keys(PASSWORD)
+driver.find_element_by_id("navlogin").click()
+
+# navigate to logbook
+driver.find_element_by_id("llogbook").click()
+
+time.sleep(10)
+driver.quit()
