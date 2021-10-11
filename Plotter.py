@@ -37,8 +37,8 @@ def get_data(scraper) -> dict:
 
 
 def main():
-    scraper = Scraper(DEBUG) # TODO : run this in background thread
-    data = get_data(scraper) # TODO : await until scraper has been initalized
+    scraper = Scraper(DEBUG)  # TODO : run this in background thread
+    data = get_data(scraper)  # TODO : await until scraper has been initalized
     print("data", data)
 
 
