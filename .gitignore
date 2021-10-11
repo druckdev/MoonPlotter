@@ -130,3 +130,6 @@ dmypy.json
 
 # Geckodriver used by selenium
 geckodriver
+
+# Cache
+data.json
