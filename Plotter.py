@@ -5,13 +5,15 @@ import getopt
 import sys
 
 # process arguments
-(OPT, _) = getopt.getopt(sys.argv[1:], "cdu:p:", ["cache", "debug", "username", "password"])
+(OPT, _) = getopt.getopt(sys.argv[1:], "cdu:p:", [
+    "cache", "debug", "username", "password"])
 OPT = dict(OPT)
 
 DEBUG = '-d' in OPT or '--debug' in OPT
 USE_CACHE = '-c' in OPT or '--cache' in OPT
-USERNAME = OPT['-u'] if OPT['-u'] != '' else OPT['--username']   
+USERNAME = OPT['-u'] if OPT['-u'] != '' else OPT['--username']
 PASSWORD = OPT['-p'] if OPT['-p'] != '' else OPT['--password']
+
 
 def get_data() -> dict:
     data = {}
@@ -34,9 +36,11 @@ def get_data() -> dict:
 
     return data
 
+
 def main():
     data = get_data()
     print("data", data)
+
 
 if __name__ == '__main__':
     main()

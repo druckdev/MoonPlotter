@@ -9,6 +9,7 @@ try:
 except BaseException:
     getGecko_installed = False
 
+
 class Scraper:
 
     def __init__(self, DEBUG: bool):
@@ -35,27 +36,28 @@ class Scraper:
         driver.find_element_by_id("Login_Password").send_keys(PASSWORD)
         driver.find_element_by_id("navlogin").click()
 
-        time.sleep(10) # TODO: await properly 
+        time.sleep(10)  # TODO: await properly
 
         # navigate to logbook
         driver.find_element_by_id("llogbook").click()
         driver.find_element_by_link_text("VIEW").click()
 
-        time.sleep(10) # TODO: await properly 
+        time.sleep(10)  # TODO: await properly
 
         # select version
         select = Select(driver.find_element_by_id("Holdsetup"))
-        select.select_by_index(1) # 2019 version TODO : more stable
+        select.select_by_index(1)  # 2019 version TODO : more stable
 
-        time.sleep(1) # TODO: await properly 
+        time.sleep(1)  # TODO: await properly
 
         main_section = driver.find_element_by_id("main-section")
 
         # get a tag expanders for the various days
-        expanders = driver.find_elements_by_xpath("//a[@class='k-icon k-i-expand']") 
+        expanders = driver.find_elements_by_xpath(
+            "//a[@class='k-icon k-i-expand']")
         res = []
         for a_tag in expanders:
-            a_tag.click() # expand information
+            a_tag.click()  # expand information
 
             # get all entries for that day
             entries = main_section.find_elements_by_class_name("entry")
@@ -80,5 +82,4 @@ class Scraper:
         # cleanup
         driver.quit()
 
-        print(formatted_data)
         return formatted_data
