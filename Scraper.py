@@ -16,12 +16,13 @@ class Scraper:
         self.MB_URL = "https://www.moonboard.com"
         self.DEBUG = DEBUG
 
-    def fetch_data(self, USERNAME: str, PASSWORD: str) -> dict:
         # use getGecko to get the driver
         if getGecko_installed:
             print("Getting GeckoDriver")
             get_driver = GetGeckoDriver()
             get_driver.install()
+
+    def fetch_data(self, USERNAME: str, PASSWORD: str) -> dict:
 
         # use the installed GeckoDriver with Selenium
         fireFoxOptions = webdriver.FirefoxOptions()

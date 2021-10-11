@@ -15,12 +15,11 @@ USERNAME = OPT['-u'] if OPT['-u'] != '' else OPT['--username']
 PASSWORD = OPT['-p'] if OPT['-p'] != '' else OPT['--password']
 
 
-def get_data() -> dict:
+def get_data(scraper) -> dict:
     data = {}
 
     if not USE_CACHE or not exists('./data.json'):
         # refetch data
-        scraper = Scraper(DEBUG)
         data = scraper.fetch_data(USERNAME, PASSWORD)
 
         if USE_CACHE:
@@ -38,7 +37,8 @@ def get_data() -> dict:
 
 
 def main():
-    data = get_data()
+    scraper = Scraper(DEBUG) # TODO : run this in background thread
+    data = get_data(scraper) # TODO : await until scraper has been initalized
     print("data", data)
 
 
