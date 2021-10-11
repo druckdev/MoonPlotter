@@ -2,8 +2,6 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 import time
 from os.path import isdir
-import sys
-import getopt
 
 getGecko_installed = True
 try:
@@ -11,76 +9,76 @@ try:
 except BaseException:
     getGecko_installed = False
 
+class Scraper:
 
-MB_URL = "https://www.moonboard.com"
+    def __init__(self, DEBUG: bool):
+        self.MB_URL = "https://www.moonboard.com"
+        self.DEBUG = DEBUG
 
-# process arguments
-(OPT, _) = getopt.getopt(sys.argv[1:], "du:p:", ["debug", "username", "password"])
-OPT = dict(OPT)
+    def fetch_data(self, USERNAME: str, PASSWORD: str) -> dict:
+        # use getGecko to get the driver
+        if getGecko_installed:
+            print("Getting GeckoDriver")
+            get_driver = GetGeckoDriver()
+            get_driver.install()
 
-DEBUG = '-d' in OPT or '--debug' in OPT
-USERNAME = OPT['-u'] if OPT['-u'] != '' else OPT['--username']   
-PASSWORD = OPT['-p'] if OPT['-p'] != '' else OPT['--password']
+        # use the installed GeckoDriver with Selenium
+        fireFoxOptions = webdriver.FirefoxOptions()
+        fireFoxOptions.headless = not self.DEBUG
+        driver = webdriver.Firefox(options=fireFoxOptions)
 
-# use getGecko to get the driver
-if getGecko_installed:
-    print("Getting GeckoDriver")
-    get_driver = GetGeckoDriver()
-    get_driver.install()
+        driver.get(self.MB_URL)
 
-# use the installed GeckoDriver with Selenium
-fireFoxOptions = webdriver.FirefoxOptions()
-fireFoxOptions.headless = not DEBUG
-driver = webdriver.Firefox(options=fireFoxOptions)
+        # login
+        driver.find_element_by_id("loginDropdown").click()
+        driver.find_element_by_id("Login_Username").send_keys(USERNAME)
+        driver.find_element_by_id("Login_Password").send_keys(PASSWORD)
+        driver.find_element_by_id("navlogin").click()
 
-driver.get(MB_URL)
+        time.sleep(10) # TODO: await properly 
 
-# login
-driver.find_element_by_id("loginDropdown").click()
-driver.find_element_by_id("Login_Username").send_keys(USERNAME)
-driver.find_element_by_id("Login_Password").send_keys(PASSWORD)
-driver.find_element_by_id("navlogin").click()
+        # navigate to logbook
+        driver.find_element_by_id("llogbook").click()
+        driver.find_element_by_link_text("VIEW").click()
 
-time.sleep(10) # TODO: await properly 
+        time.sleep(10) # TODO: await properly 
 
-# navigate to logbook
-driver.find_element_by_id("llogbook").click()
-driver.find_element_by_link_text("VIEW").click()
+        # select version
+        select = Select(driver.find_element_by_id("Holdsetup"))
+        select.select_by_index(1) # 2019 version TODO : more stable
 
-time.sleep(10) # TODO: await properly 
+        time.sleep(1) # TODO: await properly 
 
-# select version
-select = Select(driver.find_element_by_id("Holdsetup"))
-select.select_by_index(1) # 2019 version TODO : more stable
+        main_section = driver.find_element_by_id("main-section")
 
-time.sleep(1) # TODO: await properly 
+        # get a tag expanders for the various days
+        expanders = driver.find_elements_by_xpath("//a[@class='k-icon k-i-expand']") 
+        res = []
+        for a_tag in expanders:
+            a_tag.click() # expand information
 
-main_section = driver.find_element_by_id("main-section")
+            # get all entries for that day
+            entries = main_section.find_elements_by_class_name("entry")
 
-# get a tag expanders for the various days
-expanders = driver.find_elements_by_xpath("//a[@class='k-icon k-i-expand']") 
-res = []
-for a_tag in expanders:
-    a_tag.click() # expand information
+            for entry in entries:
+                # get data
+                if not entry.text in res:
+                    res.append(entry.text)
 
-    # get all entries for that day
-    entries = main_section.find_elements_by_class_name("entry")
+        # process data
+        formatted_data = []
 
-    for entry in entries:
-        # get data
-        if not entry.text in res:
-            res.append(entry.text)
+        for data in res:
+            data_arr = data.split('\n')
+            formatted = {
+                'Name': data_arr[0],
+                'Setter': data_arr[1],
+                'Grade': data_arr[2].split('.')[0]
+            }
+            formatted_data.append(formatted)
 
-# process data
-formatted_data = []
+        # cleanup
+        driver.quit()
 
-for data in res:
-    data_arr = data.split('\n')
-    formatted = {
-        'Name': data_arr[0],
-        'Setter': data_arr[1],
-        'Grade': data_arr[2].split('.')[0]
-    }
-    formatted_data.append(formatted)
-
-driver.quit()
+        print(formatted_data)
+        return formatted_data
