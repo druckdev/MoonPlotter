@@ -11,5 +11,8 @@ Using the aur (which threw a bunch of 404s for me):
 Using pip:
 `pip install get-gecko-driver`
 
-And if necessary Selenium.
+If necessary install Selenium (for scraping).
 `pip3 install selenium`
+
+And also kivy (for UI).
+`pip3 install kivy`
