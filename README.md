@@ -2,7 +2,7 @@
 A small app which scrapes a persons logbook data from the moonboard website and provides some interesting graphs.
 
 
-**Setup :**
+**Setup for development :**
 Install 'geckodriver' (driver for firefox) 
 
 Using the aur (which threw a bunch of 404s for me):
@@ -22,12 +22,22 @@ Install 'matplotlib' (for plotting the data).
 and
 `garden install matplotlib`
 
-**Building :**
+**Building for production :**
 
-Install 'buildozer' for building th app for android.
+Install 'buildozer' for building the app for android.
 `pip install buildozer`
 
 Build with
 `buildozer -v android debug`
 
 The config file is located in `./buildozer/buildozer.spec`.
+
+
+**Options for starting MoonPlotter.py :**
+
+| description                     | usage                                  |
+----------------------------------------------------------------------------
+| username of a moonboard account | -u <username> or --username <username> |
+| password to the username        | -p <password> or --password <password> |
+| whether to (user) cache data    | -c or --cache                          |
+| debug mode shows the browser    | -d or --debug                          |

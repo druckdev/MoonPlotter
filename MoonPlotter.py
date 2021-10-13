@@ -25,12 +25,14 @@ USE_CACHE = '-c' in OPT or '--cache' in OPT
 USERNAME = OPT['-u'] if OPT['-u'] != '' else OPT['--username']
 PASSWORD = OPT['-p'] if OPT['-p'] != '' else OPT['--password']
 
+
 class Plotter(App):
     def build(self):
 
         # get data which is a list of dictionaries, sorted by entry date
         scraper = Scraper(DEBUG)  # TODO : run this in background thread
-        data = self.get_data(scraper)  # TODO : await until scraper has been initalized
+        # TODO : await until scraper has been initalized
+        data = self.get_data(scraper)
         print("data", data)
 
         Builder.load_file("app.kv")
