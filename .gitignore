@@ -133,3 +133,6 @@ geckodriver
 
 # Cache
 data.json
+
+# release build
+/buildozer/build
