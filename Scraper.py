@@ -21,6 +21,21 @@ class Scraper:
             print("Getting GeckoDriver")
             get_driver = GetGeckoDriver()
             get_driver.install()
+    
+    MONTH_MAP = {
+            "Jan": 1,
+            "Feb": 2,
+            "Mar": 3,
+            "Apr": 4,
+            "Mai": 5,
+            "Jun": 6,
+            "Jul": 7,
+            "Aug": 8,
+            "Sep": 9,
+            "Oct": 10, 
+            "Nov": 11,
+            "Dec": 12
+            }
 
     def fetch_data(self, USERNAME: str, PASSWORD: str) -> dict:
 
@@ -53,11 +68,17 @@ class Scraper:
 
         main_section = driver.find_element_by_id("main-section")
 
+        # get headers for rows
+        headers = main_section.find_elements_by_class_name(
+            "logbook-grid-header")
+
         # get a tag expanders for the various days
         expanders = driver.find_elements_by_xpath(
             "//a[@class='k-icon k-i-expand']")
+        # create list of elements
         res = []
-        for a_tag in expanders:
+        def any_nested(list, key): return any([k == key for k, _ in list])
+        for a_tag, header in zip(expanders, headers):
             a_tag.click()  # expand information
 
             # get all entries for that day
@@ -65,22 +86,27 @@ class Scraper:
 
             for entry in entries:
                 # get data
-                if not entry.text in res:
-                    res.append(entry.text)
+                if not any_nested(res, entry.text):
+                    res_entry = (entry.text, header.text)  # (route info, date)
+                    res.append(res_entry)
 
         # process data
         formatted_data = []
-
-        for data in res:
+        for (data, date) in res:
             data_arr = data.split('\n')
+            day, month, year = date.split('\n')[0].split(' ')
+            day, month, year = Number(day), MONTH_MAP[month], Number(year)
+
             formatted = {
                 'Name': data_arr[0],
                 'Setter': data_arr[1],
-                'Grade': data_arr[2].split('.')[0]
+                'Grade': data_arr[2].split('.')[0],
+                'Date': (day, month, year)
             }
+
             formatted_data.append(formatted)
 
         # cleanup
         driver.quit()
-
+        
         return formatted_data
