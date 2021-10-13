@@ -21,6 +21,21 @@ class Scraper:
             print("Getting GeckoDriver")
             get_driver = GetGeckoDriver()
             get_driver.install()
+    
+    MONTH_MAP = {
+            "Jan": 1,
+            "Feb": 2,
+            "Mar": 3,
+            "Apr": 4,
+            "Mai": 5,
+            "Jun": 6,
+            "Jul": 7,
+            "Aug": 8,
+            "Sep": 9,
+            "Oct": 10, 
+            "Nov": 11,
+            "Dec": 12
+            }
 
     def fetch_data(self, USERNAME: str, PASSWORD: str) -> dict:
 
@@ -80,6 +95,7 @@ class Scraper:
         for (data, date) in res:
             data_arr = data.split('\n')
             day, month, year = date.split('\n')[0].split(' ')
+            day, month, year = Number(day), MONTH_MAP[month], Number(year)
 
             formatted = {
                 'Name': data_arr[0],
