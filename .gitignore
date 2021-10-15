@@ -134,5 +134,6 @@ geckodriver
 # Cache
 data.json
 
-# release build
-/buildozer/build
+# folders created by buildozer on build execution
+/buildozer/.buildozer
+/buildozer/bin
