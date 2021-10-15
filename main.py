@@ -1,3 +1,5 @@
+__version__ = “1.0”
+
 import json
 from Scraper import Scraper
 from Plot import Plot
