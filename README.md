@@ -28,7 +28,9 @@ Install 'buildozer' for building the app for android.
 `pip install buildozer`
 
 Build with
-`buildozer -v android debug`
+`buildozer android release`
+The .apk is then placed in the created bin folder.
+First builds take some time because buildozer installs a bunch of tools.
 
 The config file is located in `./buildozer/buildozer.spec`.
 
