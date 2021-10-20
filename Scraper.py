@@ -2,6 +2,9 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 import time
 from os.path import isdir
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 
 getGecko_installed = True
 try:
@@ -21,21 +24,21 @@ class Scraper:
             print("Getting GeckoDriver")
             get_driver = GetGeckoDriver()
             get_driver.install()
-    
+
     MONTH_MAP = {
-            "Jan": 1,
-            "Feb": 2,
-            "Mar": 3,
-            "Apr": 4,
-            "Mai": 5,
-            "Jun": 6,
-            "Jul": 7,
-            "Aug": 8,
-            "Sep": 9,
-            "Oct": 10, 
-            "Nov": 11,
-            "Dec": 12
-            }
+        "Jan": 1,
+        "Feb": 2,
+        "Mar": 3,
+        "Apr": 4,
+        "Mai": 5,
+        "Jun": 6,
+        "Jul": 7,
+        "Aug": 8,
+        "Sep": 9,
+        "Oct": 10,
+        "Nov": 11,
+        "Dec": 12
+    }
 
     def fetch_data(self, USERNAME: str, PASSWORD: str) -> dict:
 
@@ -52,7 +55,11 @@ class Scraper:
         driver.find_element_by_id("Login_Password").send_keys(PASSWORD)
         driver.find_element_by_id("navlogin").click()
 
-        time.sleep(10)  # TODO: await properly
+        WebDriverWait(
+            driver, 10).until(
+            EC.presence_of_element_located(
+                (By.ID, "navlogin")))
+        #WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.ID, "element_id")))
 
         # navigate to logbook
         driver.find_element_by_id("llogbook").click()
@@ -75,6 +82,7 @@ class Scraper:
         # get a tag expanders for the various days
         expanders = driver.find_elements_by_xpath(
             "//a[@class='k-icon k-i-expand']")
+
         # create list of elements
         res = []
         def any_nested(list, key): return any([k == key for k, _ in list])
@@ -108,5 +116,5 @@ class Scraper:
 
         # cleanup
         driver.quit()
-        
+
         return formatted_data
