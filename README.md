@@ -34,6 +34,22 @@ First builds take some time because buildozer installs a bunch of tools.
 
 The config file is located in `./buildozer/buildozer.spec`.
 
+**Problems :**
+I ran into a problem with the build process on Manjaro Linux.
+The error occured on executing `gradlew assembleRelease` (it's executed in a subfolder so the actual command may be much longer).
+
+The answer was found here : 
+https://stackoverflow.com/questions/67079327/how-to-fix-unsupported-class-file-major-version-60-in-intellij
+
+And it was to install and use openjdk 11 as follows.
+
+```
+yay -S jdk11-openjdk
+sudo archlinux-java set java-11-openjdk   
+```
+
+which one you're currently using may be checked with 
+`archlinux-java status`
 
 **Options for starting MoonPlotter.py :**
 

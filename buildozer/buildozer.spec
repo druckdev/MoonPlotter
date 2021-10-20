@@ -1,13 +1,13 @@
 [app]
 
 # (str) Title of your application
-title = Moon-Plotter
+title = MoonPlotter
 
 # (str) Package name
-package.name = moon-plotter
+package.name = moonplotter
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = org.moon-plotter
+package.domain = org.moonplotter
 
 # (str) Source code where the main.py live
 source.dir = ..
