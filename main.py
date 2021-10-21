@@ -1,32 +1,21 @@
 __version__ = "1.0"
 
-import json
 from Scraper import Scraper
 from Plot import Plot
 from os.path import exists
 from os import environ
+import json
+import threading
+from Const import *
 
 # prevent kivy from parsing command line args
 environ["KIVY_NO_ARGS"] = "1"  # nopep8
 
-import getopt
-import sys
-from kivy.app import App
 import kivy
+from kivy.app import App
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.lang import Builder
-
-# process arguments
-(OPT, _) = getopt.getopt(sys.argv[1:], "cdu:p:", [
-    "cache", "debug", "username", "password"])
-OPT = dict(OPT)
-
-DEBUG = '-d' in OPT or '--debug' in OPT
-USE_CACHE = '-c' in OPT or '--cache' in OPT
-USERNAME = OPT['-u'] if OPT['-u'] != '' else OPT['--username']
-PASSWORD = OPT['-p'] if OPT['-p'] != '' else OPT['--password']
-
 
 class Plotter(App):
     def build(self):
