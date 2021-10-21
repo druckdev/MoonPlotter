@@ -54,7 +54,7 @@ which one you're currently using may be checked with
 **Options for starting MoonPlotter.py :**
 
 | description                     | usage                                  |
-----------------------------------------------------------------------------
+|---------------------------------|----------------------------------------|
 | username of a moonboard account | -u <username> or --username <username> |
 | password to the username        | -p <password> or --password <password> |
 | whether to (user) cache data    | -c or --cache                          |
