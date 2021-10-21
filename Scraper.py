@@ -56,11 +56,7 @@ class Scraper:
         driver.find_element_by_id("Login_Password").send_keys(PASSWORD)
         driver.find_element_by_id("navlogin").click()
 
-        WebDriverWait(
-            driver, 10).until(
-            EC.presence_of_element_located(
-                (By.ID, "navlogin")))
-        #WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.ID, "element_id")))
+        time.sleep(10)  # TODO: await properly
 
         # navigate to logbook
         driver.find_element_by_id("llogbook").click()
@@ -104,7 +100,7 @@ class Scraper:
         for (data, date) in res:
             data_arr = data.split('\n')
             day, month, year = date.split('\n')[0].split(' ')
-            day, month, year = Number(day), MONTH_MAP[month], Number(year)
+            day, month, year = int(day), self.MONTH_MAP[month], int(year)
 
             formatted = {
                 'Name': data_arr[0],
