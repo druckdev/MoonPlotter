@@ -17,6 +17,7 @@ from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.lang import Builder
 
+
 class Plotter(App):
     def build(self):
 
@@ -28,7 +29,8 @@ class Plotter(App):
             with open('data.json', 'r') as f:
                 self.data = json.load(f)
 
-            potential_thread = threading.Thread(target=self.init_scraper, name="Scraper-Initalizer")
+            potential_thread = threading.Thread(
+                target=self.init_scraper, name="Scraper-Initalizer")
             potential_thread.start()
 
         else:
@@ -39,22 +41,22 @@ class Plotter(App):
 
         return Plot(self.data)
 
-
     def init_scraper(self):
         """Needs to be called to initalize the scraper, after refetching can be done by simply calling 'fetch_data' with 'self.scraper' as argument"""
-        self.scraper = Scraper(DEBUG) 
+        self.scraper = Scraper(DEBUG)
         self.fetch_data()
         print("Initalization done", len(self.data), self.data)
 
-    def fetch_data(self) -> dict:        
+    def fetch_data(self) -> dict:
         # refetch data
         self.data = self.scraper.fetch_data(USERNAME, PASSWORD)
-        
+
         # cache data
         data_json = json.dumps(self.data, indent=4)
 
         with open('data.json', 'w') as f:
             f.write(data_json)
+
 
 if __name__ == '__main__':
     app = Plotter()
